@@ -2,6 +2,9 @@
 - Go DuckDB in Lambda is avalaible under the releases tab you can download the zip and directly upload it to a AWS lambda Golang (AWS Linux 2023) and test it out your self.
   https://github.com/anonranger/Go-DuckDB-Lambda/releases/tag/v1
   
+- If you have questions, post it in the issues.
+  
+  
 # Screenshot
 
 
