@@ -1,5 +1,5 @@
 # Go-DuckDB-Lambda
-this repository contains examples to successfully compile a golang binary to run on a AWS lambda
+This repository contains examples to successfully compile a golang binary to run on a AWS lambda
 
 - main.go has a simple duckdb program where duckdb is run in memory mode and reads data from a csv file thats present in this repository (`student-data.csv`)
 - since duckdb uses C++, the go-duckdb lib requires CGO (via which we can call C Code from Golang)
