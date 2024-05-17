@@ -1,4 +1,4 @@
-# Sample EXE file
+# Option 1 : Run EXE file (pre-compiled)
 - Go DuckDB in Lambda is avalaible under the releases tab you can download the zip and directly upload it to a AWS lambda Golang (AWS Linux 2023) and test it out your self.
   https://github.com/anonranger/Go-DuckDB-Lambda/releases/tag/v1
   
@@ -6,7 +6,7 @@
 
 
 
-# Go-DuckDB-Lambda - Compile steps
+# Option 2: Compile steps
 This repository contains examples to successfully compile a golang binary to run on a AWS lambda
 
 - main.go has a simple duckdb program where duckdb is run in memory mode and reads data from a csv file thats present in this repository (`student-data.csv`)
