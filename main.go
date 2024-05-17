@@ -19,9 +19,8 @@ func hello() (string, error) {
 
 	db.Exec("INSTALL httpfs")
 	db.Exec("LOAD httpfs")
-	db.Exec("CREATE SECRET (TYPE S3, ENDPOINT 'r2.dev')")
 
-	row := db.QueryRow(`select count(*) from 's3://pub-<redacted>/student-data.csv'`)
+	row := db.QueryRow(`select count(*) from 'https://raw.githubusercontent.com/anonranger/Go-DuckDB-Lambda/main/student-data.csv'`)
 	var count int
 	err = row.Scan(&count)
 	if err != nil {
@@ -31,5 +30,6 @@ func hello() (string, error) {
 }
 
 func main() {
+	fmt.Println(hello())
 	lambda.Start(hello)
 }

@@ -1,6 +1,6 @@
 module duckdb_lambda
 
-go 1.23
+go 1.21
 
 require (
 	github.com/apache/arrow/go/v14 v14.0.2 // indirect
