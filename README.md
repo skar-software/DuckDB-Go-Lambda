@@ -19,7 +19,7 @@ This repository contains examples to successfully compile a golang binary to run
 - hence we will have to compile the binary from that very OS Environment
 - we build it using either a `EC2 Instance` or `Docker File`
 ## Build using EC2 Instance
-- spin a ec2 instance with the same OS (AWS Linux 2023 in my case) as your lamba
+- spin a ec2 instance with the same OS (AWS Linux 2023 in my case) as your AWS lamba
 - install golang and all required dependencies and compile the program and the resulting binary should work in AWS Lambda functions
 ## Build using Docker File
 - this is the easy way, just utilize the Dockerfile given in this repository
