@@ -4,6 +4,7 @@ RUN dnf -y update
 RUN dnf install -y gzip 
 RUN dnf install -y tar 
 RUN dnf install -y gcc
+RUN dnf install -y git
 RUN dnf -y install gcc-c++
 RUN dnf install -y libstdc++-devel
 ENV LD_LIBRARY_PATH /usr/lib64
