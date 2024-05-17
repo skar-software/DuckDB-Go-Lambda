@@ -1,4 +1,11 @@
-# Go-DuckDB-Lambda
+# Sample EXE file
+- Go DuckDB in Lambda is avalaible under the releases tab you can download the zip and directly upload it to a lamba (AWS Linux 2023) and test it out your self.
+
+# Screenshot
+
+
+
+# Go-DuckDB-Lambda - Compile steps
 This repository contains examples to successfully compile a golang binary to run on a AWS lambda
 
 - main.go has a simple duckdb program where duckdb is run in memory mode and reads data from a csv file thats present in this repository (`student-data.csv`)
@@ -26,5 +33,4 @@ This repository contains examples to successfully compile a golang binary to run
 	Specify a home directory using the SET home_directory='/path/to/dir' option.`
 - as this https://github.com/duckdb/duckdb/issues/3855 suggests, in AWS Lambda environment variables set variable `HOME` to `/tmp`
 
-## Example
-- the example program shown in this repository is avalaible under the releases tab you can download the zip and directly upload it to a lamba (AWS Linux 2023) and test it out your self
+
