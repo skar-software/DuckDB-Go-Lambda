@@ -6,7 +6,7 @@
   
   
 # Screenshot
-
+![example_output](output_example.png)
 
 
 # Option 2: Compile steps
@@ -36,5 +36,4 @@ This repository contains examples to successfully compile a golang binary to run
 	Can't find the home directory at ''
 	Specify a home directory using the SET home_directory='/path/to/dir' option.`
 - as this https://github.com/duckdb/duckdb/issues/3855 suggests, in AWS Lambda environment variables set variable `HOME` to `/tmp`
-
 

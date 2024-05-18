@@ -11,7 +11,6 @@ import (
 )
 
 func hello() (string, error) {
-	resultantString := ""
 	db, err := sql.Open("duckdb", "")
 	if err != nil {
 		fmt.Println("Error opening database connection:", err)
@@ -30,7 +29,7 @@ func hello() (string, error) {
 		fmt.Println(err)
 	}
 
-	resultantString += "No of records in CSV: " + strconv.Itoa(count) + "\n\n"
+	fmt.Println("No of records in CSV: " + strconv.Itoa(count) + "\n\n")
 
 	// Get a random record
 	query := `
@@ -68,7 +67,7 @@ func hello() (string, error) {
             log.Fatal(err)
         }
 
-		resultantString += "Random record from CSV\n"
+		fmt.Println("Random record from CSV\n")
         // Print each column's value
         for i, col := range columns {
             var val interface{}
@@ -76,7 +75,7 @@ func hello() (string, error) {
             val = *(valuePtrs[i].(*interface{}))
 
             // Print the value
-            resultantString += fmt.Sprintf("%s: %v\n", col, val)
+            fmt.Println(col, val)
         }
     }
 
@@ -84,7 +83,7 @@ func hello() (string, error) {
         log.Fatal(err)
     }
 
-	return resultantString, nil
+	return "See logs below for output", nil
 }
 
 func main() {
