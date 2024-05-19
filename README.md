@@ -1,13 +1,50 @@
+# Usage
+just pass your query into the "query" key in the input event json of the lambda like below
+```json
+{
+	"query": "SELECT * FROM USERS;"
+}
+```
+if you are going to pass multiple quries make sure to use the termination character (;)
+
+if you require to use double quotes in the query then it must be escaped while its being passed into the event json
+
+# Example quries
+fetch count of records present in example csv
+
+**Input Query**
+```sql
+SELECT COUNT(*) AS 'Total Records' FROM 'https://raw.githubusercontent.com/anonranger/Go-DuckDB-Lambda/main/student-data.csv';
+```
+**Output**
+```
++---------------+
+| Total Records |
++---------------+
+| 61953         |
++---------------+
+```
+fetch a random record for example csv
+
+**Input Query**
+```sql
+SELECT "Fiscal Year", Career, "Program Level", Campus FROM 'https://raw.githubusercontent.com/anonranger/Go-DuckDB-Lambda/main/student-data.csv' ORDER BY RANDOM() LIMIT 1;
+```
+**Output**
+```
++-------------+---------------+---------------+------------------------+
+| Fiscal Year | Career        | Program Level | Campus                 |
++-------------+---------------+---------------+------------------------+
+| 2023        | Undergraduate | Bachelors     | University of Waterloo |
++-------------+---------------+---------------+------------------------+
+```
+
+
 # Option 1 : Run EXE file (pre-compiled)
 - Go DuckDB in Lambda EXE file is avalaible under the releases tab. You can download the zip and directly upload it to a AWS lambda Golang (AWS Linux 2023) and test it out your self.
   https://github.com/anonranger/Go-DuckDB-Lambda/releases/tag/v1
   
 - If you have questions, post it in the issues.
-  
-  
-# Screenshot
-![example_output](output_example.png)
-
 
 # Option 2: Compile steps
 This repository contains examples to successfully compile a golang binary to run on a AWS lambda

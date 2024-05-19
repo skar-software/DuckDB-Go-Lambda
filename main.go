@@ -1,16 +1,24 @@
 package main
 
 import (
+	"context"
 	"database/sql"
 	"fmt"
 	"log"
-	"strconv"
+	"os"
+	"strings"
 
 	"github.com/aws/aws-lambda-go/lambda"
+	"github.com/jedib0t/go-pretty/v6/table"
+	"github.com/jedib0t/go-pretty/v6/text"
 	_ "github.com/marcboeker/go-duckdb"
 )
 
-func hello() (string, error) {
+type InputEvent struct {
+	Query string `json:"query"`
+}
+
+func hello(ctx context.Context, event InputEvent) (string, error) {
 	db, err := sql.Open("duckdb", "")
 	if err != nil {
 		fmt.Println("Error opening database connection:", err)
@@ -18,70 +26,63 @@ func hello() (string, error) {
 	}
 	defer db.Close()
 
-	db.Exec("INSTALL httpfs")
-	db.Exec("LOAD httpfs")
+	query := event.Query
 
-	// Get count of records in csv
-	row := db.QueryRow(`select count(*) from 'https://raw.githubusercontent.com/anonranger/Go-DuckDB-Lambda/main/student-data.csv'`)
-	var count int
-	err = row.Scan(&count)
-	if err != nil {
-		fmt.Println(err)
+	// auto install and load extensions
+	db.Exec("SET autoinstall_known_extensions=1;")
+	db.Exec("SET autoload_known_extensions=1;")
+
+	for _, querySegment := range strings.Split(query, ";") {
+		if querySegment == "" {
+			continue
+		}
+		t := table.NewWriter()
+		t.SetOutputMirror(os.Stdout)
+		t.Style().Format.Header = text.FormatDefault
+		rows, err := db.Query(querySegment)
+		if err != nil {
+			log.Fatal(err)
+		}
+		defer rows.Close()
+
+		columns, err := rows.Columns()
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		tr := table.Row{}
+		for _, col := range columns {
+			tr = append(tr, fmt.Sprint(col))
+		}
+		t.AppendHeader(tr)
+
+		values := make([]interface{}, len(columns))
+		valuePtrs := make([]interface{}, len(columns))
+		for i := range values {
+			valuePtrs[i] = &values[i]
+		}
+
+		var tableDataRows []table.Row = []table.Row{}
+
+		for rows.Next() {
+			tableRowCols := table.Row{}
+			err = rows.Scan(valuePtrs...)
+			if err != nil {
+				log.Fatal(err)
+			}
+			for i := range columns {
+				val := *(valuePtrs[i].(*interface{}))
+				tableRowCols = append(tableRowCols, fmt.Sprint(val))
+			}
+			tableDataRows = append(tableDataRows, tableRowCols)
+		}
+		t.AppendRows(tableDataRows)
+
+		if err := rows.Err(); err != nil {
+			log.Fatal(err)
+		}
+		t.Render()
 	}
-
-	fmt.Println("No of records in CSV: " + strconv.Itoa(count) + "\n\n")
-
-	// Get a random record
-	query := `
-        SELECT *
-        FROM 'https://raw.githubusercontent.com/anonranger/Go-DuckDB-Lambda/main/student-data.csv'
-        ORDER BY RANDOM()
-        LIMIT 1;
-    `
-
-    // Execute the query
-    rows, err := db.Query(query)
-    if err != nil {
-        log.Fatal(err)
-    }
-    defer rows.Close()
-
-    // Get column names
-    columns, err := rows.Columns()
-    if err != nil {
-        log.Fatal(err)
-    }
-
-    // Create a slice of interface{}'s to represent each column, and a second slice to contain pointers to each item in the columns slice
-    values := make([]interface{}, len(columns))
-    valuePtrs := make([]interface{}, len(columns))
-    for i := range values {
-        valuePtrs[i] = &values[i]
-    }
-
-    // Iterate over the rows
-    for rows.Next() {
-        // Scan the result into the column pointers
-        err = rows.Scan(valuePtrs...)
-        if err != nil {
-            log.Fatal(err)
-        }
-
-		fmt.Println("Random record from CSV\n")
-        // Print each column's value
-        for i, col := range columns {
-            var val interface{}
-            // Retrieve the value
-            val = *(valuePtrs[i].(*interface{}))
-
-            // Print the value
-            fmt.Println(col, val)
-        }
-    }
-
-    if err := rows.Err(); err != nil {
-        log.Fatal(err)
-    }
 
 	return "See logs below for output", nil
 }
