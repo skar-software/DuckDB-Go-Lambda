@@ -2,7 +2,7 @@
 just pass your query into the "query" key in the input event json of the lambda like below
 ```json
 {
-	"query": "SELECT * FROM USERS;"
+	"query": "SELECT COUNT(*) AS 'Total Records' FROM 'https://raw.githubusercontent.com/anonranger/Go-DuckDB-Lambda/main/student-data.csv';"
 }
 ```
 if you are going to pass multiple quries make sure to use the termination character (;)
