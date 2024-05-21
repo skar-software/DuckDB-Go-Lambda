@@ -9,7 +9,7 @@ if you are going to pass multiple quries make sure to use the termination charac
 
 if you require to use double quotes in the query then it must be escaped while its being passed into the event json
 
-# Example quries
+# Example queries
 fetch count of records present in example csv
 
 **Input Query**
